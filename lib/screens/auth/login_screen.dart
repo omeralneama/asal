@@ -1,6 +1,6 @@
 import 'package:asallah_fruits/fetch_screen.dart';
 import 'package:asallah_fruits/screens/auth/forget_password.dart';
-import 'package:asallah_fruits/screens/auth/phone_auth.dart';
+import 'package:asallah_fruits/screens/auth/register.dart';
 import 'package:asallah_fruits/services/global_methods.dart';
 import 'package:asallah_fruits/widgets/auth_button.dart';
 import 'package:asallah_fruits/widgets/text_widget.dart';
@@ -9,11 +9,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
-
 import '../../const/const.dart';
 import '../../const/firebase_const.dart';
-import '../../providers/order_provider.dart';
 import '../loading_manager.dart';
 
 class LoginScreen extends StatefulWidget
@@ -298,7 +295,7 @@ class _LoginScreenState extends State<LoginScreen>
                               {
                                 GlobalMethods.navigateTo(
                                     ctx: context,
-                                  routeName: PhoneAuthScreen.routeName,
+                                  routeName: RegisterScreen.routeName,
                                 );
                               },
                             ),

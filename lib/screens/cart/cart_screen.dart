@@ -114,6 +114,14 @@ class _CartScreenState extends State<CartScreen> {
     final productProvider = Provider.of<ProductsProvider>(ctx);
     final ordersProvider = Provider.of<OrdersProvider>(ctx);
     double total = 0.0;
+    TimeOfDay now = TimeOfDay.now(); // or DateTime object
+    TimeOfDay openingTime = TimeOfDay(hour: 8, minute:1,); // or leave as DateTime object
+    TimeOfDay closingTime = TimeOfDay(hour: 23, minute:1); // or leave as DateTime object
+
+    int shopOpenTimeInSeconds = openingTime.hour * 60 + openingTime.minute;
+    int shopCloseTimeInSeconds = closingTime.hour * 60 + closingTime.minute;
+    int timeNowInSeconds = now.hour * 60 + now.minute;
+
     cartProvider.getCartItems.forEach((key, value)
     {
       final getCurrentProduct = productProvider.findProductById(value.productId);
@@ -204,75 +212,77 @@ class _CartScreenState extends State<CartScreen> {
                   borderRadius: BorderRadius.circular(12),
                   onTap: () async
                   {
-                    if(total < 30)
+                    if(shopOpenTimeInSeconds <= timeNowInSeconds &&
+                        timeNowInSeconds <= shopCloseTimeInSeconds )
                     {
-                      await Fluttertoast.showToast(
-                        msg: "قيمة الطلب يجب ان تكون اكثر من 30 ريال",
-                        toastLength: Toast.LENGTH_LONG,
-                        gravity: ToastGravity.CENTER,
-                        timeInSecForIosWeb: 1,
-                        backgroundColor: Colors.grey,
-                        textColor: Colors.white,
-                        fontSize: 16.0,);
+                      final orderId = const Uuid().v4();
+                      // الدفع
+                      // await initPayment(
+                      //   amount: total,
+                      //   email: user!.email ?? '',
+                      //   context: ctx,
+                      // );
+                      cartProvider.getCartItems.forEach((key, value) async
+                      {
+                        try {
+                          await FirebaseFirestore.instance
+                              .collection('orders')
+                              .doc(orderId).set({
+                            'orderId': orderId,
+                            'totalPrice': total,
+                            'isCashPayment': isCashPayment,
+                            'orderDate': Timestamp.now(),
+                            'address' : value.address,
+                            'emailAddress': value.emailAddress,
+                            'phoneNumber': value.phoneNumber,
+                            'userName':value.userName,
+                            'userId':value.userId,
+                          });
+                          await FirebaseFirestore.instance
+                              .collection('orders').doc(orderId)
+                              .collection('products').doc().set(
+                              {
+                                'orderId': orderId,
+                                'price': (value.isOnSale
+                                    ? value.salePrice
+                                    : value.price) * value.quantity,
+                                'singlePrice': value.price,
+                                'singleSalePrice': value.salePrice,
+                                'quantity': value.quantity,
+                                'title': value.title,
+                                'isPiece': value.isPiece,
+                              });
+                          await cartProvider.clearOnlineCart();
+                          cartProvider.clearLocalCart();
+                          ordersProvider.fetchOrders();
+                          await Fluttertoast.showToast(
+                              msg: "عميلنا العزيز تم ارسال طلبك بنجاح و سوف يقوم مندوبنا بالتوصل معك خلال لحظات",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 16.0
+                          );
+                        } catch (error) {
+                          GlobalMethods.errorDialog(
+                            subtitle: error.toString(),
+                            context: ctx,
+                          );
+                        } finally {
+                        }
+                      });
+
                           }else
                           {
-                            final orderId = const Uuid().v4();
-                            // الدفع
-                            // await initPayment(
-                            //   amount: total,
-                            //   email: user!.email ?? '',
-                            //   context: ctx,
-                            // );
-                            cartProvider.getCartItems.forEach((key, value) async
-                            {
-                              try {
-                                await FirebaseFirestore.instance
-                                    .collection('orders')
-                                    .doc(orderId).set({
-                                    'orderId': orderId,
-                                    'totalPrice': total,
-                                    'isCashPayment': isCashPayment,
-                                    'orderDate': Timestamp.now(),
-                                  'address' : value.address,
-                                  'emailAddress': value.emailAddress,
-                                  'phoneNumber': value.phoneNumber,
-                                  'userName':value.userName,
-                                  'userId':value.userId,
-                                });
-                                await FirebaseFirestore.instance
-                                    .collection('orders').doc(orderId)
-                                    .collection('products').doc().set(
-                                    {
-                                      'orderId': orderId,
-                                      'price': (value.isOnSale
-                                          ? value.salePrice
-                                          : value.price) * value.quantity,
-                                      'singlePrice': value.price,
-                                      'singleSalePrice': value.salePrice,
-                                      'quantity': value.quantity,
-                                      'title': value.title,
-                                      'isPiece': value.isPiece,
-                                    });
-                                await cartProvider.clearOnlineCart();
-                                cartProvider.clearLocalCart();
-                                ordersProvider.fetchOrders();
-                                await Fluttertoast.showToast(
-                                    msg: "عميلنا العزيز تم ارسال طلبك بنجاح و سوف يقوم مندوبنا بالتوصل معك خلال لحظات",
-                                    toastLength: Toast.LENGTH_LONG,
-                                    gravity: ToastGravity.CENTER,
-                                    timeInSecForIosWeb: 1,
-                                    backgroundColor: Colors.grey,
-                                    textColor: Colors.white,
-                                    fontSize: 16.0
-                                );
-                              } catch (error) {
-                                GlobalMethods.errorDialog(
-                                  subtitle: error.toString(),
-                                  context: ctx,
-                                );
-                              } finally {
-                              }
-                            });
+                            await Fluttertoast.showToast(
+                              msg: "المتجر مغلق حاليا",
+                              toastLength: Toast.LENGTH_LONG,
+                              gravity: ToastGravity.CENTER,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.grey,
+                              textColor: Colors.white,
+                              fontSize: 25.0,);
                           }
                   },
                   child: Padding(

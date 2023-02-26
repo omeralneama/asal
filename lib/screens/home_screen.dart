@@ -79,7 +79,7 @@ class _HomeScreenState extends State<HomeScreen>
                     ),
                     const SizedBox(width: 5,),
                     TextWidget(
-                      text: 'هاتف الدعم : 0580743674',
+                      text: 'هاتف الدعم : 0508839254',
                       color: Colors.black38,
                       textSize: 18,
                       isTitle: true,

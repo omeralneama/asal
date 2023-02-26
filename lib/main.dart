@@ -10,7 +10,6 @@ import 'package:asallah_fruits/providers/viewed_provider.dart';
 import 'package:asallah_fruits/providers/wishlist_provider.dart';
 import 'package:asallah_fruits/screens/auth/forget_password.dart';
 import 'package:asallah_fruits/screens/auth/login_screen.dart';
-import 'package:asallah_fruits/screens/auth/phone_auth.dart';
 import 'package:asallah_fruits/screens/auth/register.dart';
 import 'package:asallah_fruits/screens/btm_bar_screen.dart';
 import 'package:asallah_fruits/screens/order/order_screen.dart';
@@ -181,10 +180,6 @@ class _MyAppState extends State<MyApp>
                       CategoryScreen.routeName : (ctx) => const Directionality(
                           textDirection: TextDirection.rtl,
                           child: CategoryScreen()),
-
-                      PhoneAuthScreen.routeName : (ctx) => const Directionality(
-                          textDirection: TextDirection.rtl,
-                          child: PhoneAuthScreen()),
                     },
                   );
                 }

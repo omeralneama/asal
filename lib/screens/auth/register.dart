@@ -282,7 +282,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           },
                           style: const TextStyle(color: Colors.white),
                           decoration: const InputDecoration(
-                            hintText: 'رقم الجوال',
+                            hintText: 'رقم واتساب',
                             hintStyle: TextStyle(color: Colors.white),
                             enabledBorder: UnderlineInputBorder(
                               borderSide: BorderSide(color: Colors.white),

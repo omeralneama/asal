@@ -70,7 +70,7 @@ class _CartWidgetState extends State<CartWidget>
                   // الصورة
                   Container(
                     height: size.width*0.22,
-                    width: size.width*0.25,
+                    width: size.width*0.22,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(12,),
                     ),

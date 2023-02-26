@@ -11,10 +11,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_iconly/flutter_iconly.dart';
 import 'package:provider/provider.dart';
 import '../providers/dark_theme_provider.dart';
-import '../providers/order_provider.dart';
 import '../widgets/text_widget.dart';
 import 'loading_manager.dart';
-import 'order/order_screen.dart';
 
 class UserScreen extends StatefulWidget {
   const UserScreen({Key? key}) : super(key: key);
@@ -176,18 +174,18 @@ class _UserScreenState extends State<UserScreen>
                       );
                     },
                   ),
-                  listTiles(
-                    title: ('طلباتي'),
-                    color: color,
-                    icon: IconlyLight.bag,
-                    onPressed: ()
-                    {
-                      GlobalMethods.navigateTo(
-                          ctx: context,
-                          routeName: OrdersScreen.routeName,
-                      );
-                    },
-                  ),
+                  // listTiles(
+                  //   title: ('طلباتي'),
+                  //   color: color,
+                  //   icon: IconlyLight.bag,
+                  //   onPressed: ()
+                  //   {
+                  //     GlobalMethods.navigateTo(
+                  //         ctx: context,
+                  //         routeName: OrdersScreen.routeName,
+                  //     );
+                  //   },
+                  // ),
                   listTiles(
                     title: ('سجل المشاهدات'),
                     color: color,

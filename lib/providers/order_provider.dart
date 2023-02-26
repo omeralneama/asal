@@ -1,9 +1,6 @@
 import 'package:asallah_fruits/models/orders_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-
-import '../const/firebase_const.dart';
 
 
 class OrdersProvider with ChangeNotifier
@@ -14,12 +11,11 @@ class OrdersProvider with ChangeNotifier
     return orders;
   }
 
-  User? user = authInstance.currentUser;
   Future<void> fetchOrders () async
   {
     await FirebaseFirestore
         .instance
-        .collection('orders').where('userId', isEqualTo : user!.uid)
+        .collection('orders')
         .get()
         .then((QuerySnapshot ordersSnapshot)
     {

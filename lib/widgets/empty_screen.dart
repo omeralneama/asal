@@ -21,7 +21,7 @@ class EmptyScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(100.0),
             child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.center,
@@ -29,11 +29,11 @@ class EmptyScreen extends StatelessWidget {
                   const SizedBox(
                     height: 50,
                   ),
-                  Image.asset(
-                    imagePath,
-                    width: double.infinity,
-                    height: size.height * 0.3,
-                  ),
+                  // Image.asset(
+                  //   imagePath,
+                  //   width: double.infinity,
+                  //   height: size.height * 0.3,
+                  // ),
                   const SizedBox(
                     height: 10,
                   ),
